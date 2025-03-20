@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Pie, Bar, Line } from "react-chartjs-2";
-import Papa from "papaparse";
+import React, { useState } from 'react';
+import { Pie, Bar, Line } from 'react-chartjs-2';
+import Papa from 'papaparse';
 import {
   Chart as ChartJS,
   ArcElement,
@@ -11,7 +11,7 @@ import {
   PointElement,
   Tooltip,
   Legend,
-} from "chart.js";
+} from 'chart.js';
 import {
   Container,
   Typography,
@@ -27,8 +27,8 @@ import {
   Grid,
   Card,
   CardContent,
-} from "@mui/material";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+} from '@mui/material';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 ChartJS.register(ArcElement, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Tooltip, Legend);
 
@@ -36,7 +36,7 @@ const RokuDashboard = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState('');
   const [summary, setSummary] = useState({
     installs: 0,
     uninstalls: 0,
@@ -66,12 +66,13 @@ const RokuDashboard = () => {
           setUploaded(true);
         }, 1500);
       },
-      error: (err) => console.error("Parsing error:", err),
+      error: (err) => console.error('Parsing error:', err),
     });
   };
 
   // Process CSV Data
   const processCSVData = (csvData) => {
+    console.log(csvData)
     let installs = 0;
     let uninstalls = 0;
     let revenue = 0;
@@ -80,25 +81,33 @@ const RokuDashboard = () => {
     const monthlyRev = {};
 
     csvData.forEach((row) => {
-      const transactionType = row["Transaction Type"]?.toLowerCase();
-      const transactionAmount = parseFloat(row["Transaction Amount"]?.replace(/,/g, "") || 0);
-      const videoTitle = row["Video Title"];
+      const transactionType = row['Transaction Type']?.toLowerCase();
+      const transactionAmount = parseFloat(row['Transaction Amount']?.replace(/,/g, '') || 0);
+      const videoTitle = row['Video Title'];
 
-      const date = new Date(row["Transaction Date"]);
+      const date = new Date(row['Transaction Date']);
       const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
 
-      if (transactionType === "purchase") installs += 1;
-      if (transactionType === "cancellation") uninstalls += 1;
+      if (transactionType === 'purchase') installs += 1;
+      if (transactionType === 'cancellation') uninstalls += 1;
       revenue += transactionAmount;
 
       if (!monthlyRev[monthYear]) monthlyRev[monthYear] = 0;
       monthlyRev[monthYear] += transactionAmount;
 
-      transactions.push({
-        date: row["Transaction Date"],
-        type: row["Transaction Type"],
-        amount: transactionAmount.toFixed(2),
-      });
+      if (transactionAmount > 0) {
+        transactions.push({
+          date: row['Transaction Date'],
+          type: row['Transaction Type'],
+          amount: transactionAmount,
+        });
+      }
+      console.log(transactions)
+      // transactions.push({
+      //   date: row["Transaction Date"],
+      //   type: row["Transaction Type"],
+      //   amount: transactionAmount.toFixed(2),
+      // });
 
       if (videoTitle) {
         videoCounts[videoTitle] = (videoCounts[videoTitle] || 0) + 1;
@@ -108,17 +117,16 @@ const RokuDashboard = () => {
     const netInstalls = installs - uninstalls;
     setSummary({ installs, uninstalls, netInstalls, revenue });
 
-    console.log(videoCounts)
+    console.log(videoCounts);
 
     // Top 10 Most Watched Videos
     const sortedVideos = Object.entries(videoCounts)
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 10)
+
       .map(([title, count]) => ({ title, count }));
 
-
     setTopVideos(sortedVideos);
-    setTopTransactions(transactions.slice(0, 10));
+    setTopTransactions(transactions);
     setMonthlyRevenue(monthlyRev);
     setData(csvData);
   };
@@ -131,19 +139,13 @@ const RokuDashboard = () => {
 
       {!uploaded ? (
         // File Upload Page
-        <Paper style={{ padding: 20, textAlign: "center" }}>
+        <Paper style={{ padding: 20, textAlign: 'center' }}>
           <Typography variant="h6" gutterBottom>
             Upload Roku CSV Report
           </Typography>
           {/* File Upload Button */}
           <label htmlFor="upload-file">
-            <input
-              type="file"
-              accept=".csv"
-              id="upload-file"
-              onChange={handleFileUpload}
-              style={{ display: "none" }}
-            />
+            <input type="file" accept=".csv" id="upload-file" onChange={handleFileUpload} style={{ display: 'none' }} />
             <Button variant="contained" component="span" startIcon={<CloudUploadIcon />}>
               Choose File
             </Button>
@@ -161,13 +163,13 @@ const RokuDashboard = () => {
           {/* Summary Cards */}
           <Grid container spacing={3}>
             {[
-              { label: "Installs", value: summary.installs, color: "#4caf50" },
-              { label: "Uninstalls", value: summary.uninstalls, color: "#f44336" },
-              { label: "Net Installs", value: summary.netInstalls, color: "#2196f3" },
-              { label: "Revenue ($)", value: summary.revenue.toFixed(2), color: "#ff9800" },
+              { label: 'Installs', value: summary.installs, color: '#4caf50' },
+              { label: 'Uninstalls', value: summary.uninstalls, color: '#f44336' },
+              { label: 'Net Installs', value: summary.netInstalls, color: '#2196f3' },
+              { label: 'Revenue ($)', value: summary.revenue.toFixed(2), color: '#ff9800' },
             ].map((item, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
-                <Card style={{ backgroundColor: item.color, color: "white" }}>
+                <Card style={{ backgroundColor: item.color, color: 'white' }}>
                   <CardContent>
                     <Typography variant="h6">{item.label}</Typography>
                     <Typography variant="h5">{item.value}</Typography>
@@ -183,11 +185,11 @@ const RokuDashboard = () => {
               <Typography variant="h6">📈 Installs vs Uninstalls</Typography>
               <Pie
                 data={{
-                  labels: ["Installs", "Uninstalls", "Net Installs"],
+                  labels: ['Installs', 'Uninstalls', 'Net Installs'],
                   datasets: [
                     {
                       data: [summary.installs, summary.uninstalls, summary.netInstalls],
-                      backgroundColor: ["#4caf50", "#f44336", "#2196f3"],
+                      backgroundColor: ['#4caf50', '#f44336', '#2196f3'],
                     },
                   ],
                 }}
@@ -198,12 +200,12 @@ const RokuDashboard = () => {
               <Typography variant="h6">💰 Revenue Analysis</Typography>
               <Bar
                 data={{
-                  labels: ["Revenue"],
+                  labels: ['Revenue'],
                   datasets: [
                     {
-                      label: "Total Revenue ($)",
+                      label: 'Total Revenue ($)',
                       data: [summary.revenue],
-                      backgroundColor: ["#ff9800"],
+                      backgroundColor: ['#ff9800'],
                     },
                   ],
                 }}
@@ -233,7 +235,9 @@ const RokuDashboard = () => {
               </TableBody>
             </Table>
           </TableContainer> */}
-          <Typography variant="h6" style={{ marginTop: 20 }}>💳 Top 10 Transactions</Typography>
+          <Typography variant="h6" style={{ marginTop: 20 }}>
+            💳 Top 10 Transactions
+          </Typography>
           <TableContainer component={Paper}>
             <Table>
               <TableHead>

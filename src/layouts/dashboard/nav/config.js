@@ -12,15 +12,15 @@ const navConfig = [
     icon: icon('dashboard-layout-svgrepo-com'),
   },
   {
-    title: 'Upload CSV FILE',
+    title: 'Direct CSV FILE',
     path: '/dashboard/user',
     icon: icon('user-circle-svgrepo-com'),
   },
-  // {
-  //   title: 'Leaguges',
-  //   path: '/dashboard/leaguge',
-  //   icon: icon('post-svgrepo-com'),
-  // },
+  {
+    title: 'Store Csv Analytics',
+    path: '/dashboard/newRoku',
+    icon: icon('post-svgrepo-com'),
+  },
   // {
   //   title: 'Team',
   //   path: '/dashboard/team',
@@ -72,15 +72,15 @@ const navConfig = [
   //   icon: icon('post-svgrepo-com'),
   // },
   {
-    title: 'content',
+    title: 'View OR Add Csv',
     path: '/dashboard/content',
     icon: icon('content-email-inbox-mail-message-icon-svgrepo-com'),
   },
-  {
-    title: 'Notifications',
-    path: '/dashboard/notification',
-    icon: icon('notification-bell-1397-svgrepo-com'),
-  },
+  // {
+  //   title: 'Notifications',
+  //   path: '/dashboard/notification',
+  //   icon: icon('notification-bell-1397-svgrepo-com'),
+  // },
 
   {
     title: 'logout',

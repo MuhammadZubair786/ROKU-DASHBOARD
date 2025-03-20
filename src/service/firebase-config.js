@@ -1,16 +1,15 @@
 // Import Firebase
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { getFirestore, collection, addDoc, getDocs } from "firebase/firestore";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCiL-RgJ0n8-C7Z_46J9i5VNOfBM_hFOSA",
-  authDomain: "sky-resource-form.firebaseapp.com",
-  projectId: "sky-resource-form",
-  storageBucket: "sky-resource-form.appspot.com", // Fixed storageBucket URL
-  messagingSenderId: "336317455241",
-  appId: "1:336317455241:web:7a6f0ac3dfdea9a60f9f58"
+  apiKey: "AIzaSyAaC-9wFUX3eVO9gYpYimZURhAsYpasHAw",
+  authDomain: "roku-dashboard-22967.firebaseapp.com",
+  projectId: "roku-dashboard-22967",
+  storageBucket: "roku-dashboard-22967.firebasestorage.app",
+  messagingSenderId: "1021783431340",
+  appId: "1:1021783431340:web:9457f9b0f582cf45d56709"
 };
 
 // Initialize Firebase
@@ -18,6 +17,6 @@ const app = initializeApp(firebaseConfig);
 
 // Get Firestore and Storage instances
 const db = getFirestore(app);
-const storage = getStorage(app);
 
-export { db, storage };
+
+export { db, collection, addDoc, getDocs };

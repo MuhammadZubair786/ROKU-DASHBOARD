@@ -31,6 +31,7 @@ import NewsManagement from './pages/OrderMangement';
 import PointsAccumulation from './pointsLevelMangement';
 import TeamList from './pages/TeamPage';
 import StandingLeagues from './pages/standing';
+import RokuNew from './pages/New_Csv';
 
 
 export default function Router() {
@@ -66,10 +67,10 @@ export default function Router() {
         // { path: 'points_management', element: <PointsAccumulation /> },
 
         // { path: 'banner', element: <BannerManagement /> },
-        // { path: 'content', element: <ContentPage /> },
+        { path: 'content', element: <ContentPage /> },
         // { path: 'subscription', element: <PostPage /> },
         // { path: 'notification', element: <NotificationPage /> },
-        // { path: 'request', element: <RequestPage /> },
+        { path: 'newRoku', element: <RokuNew /> },
         // { path: 'meal', element: <Meal /> },
         // { path: 'exercise', element: <Exercise /> },
         // { path: 'diet', element: <Diet /> },
