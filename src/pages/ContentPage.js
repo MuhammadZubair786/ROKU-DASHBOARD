@@ -48,11 +48,11 @@ const UploadCSV = () => {
       const fileUrl = res.data.secure_url;
 
       // Save URL, Year & Month to Firestore
-      await addDoc(collection(db, "csvFiles"), { 
-        url: fileUrl, 
-        name: file.name, 
-        selectedYear, 
-        selectedMonth 
+      await addDoc(collection(db, "csvFiles"), {
+        url: fileUrl,
+        name: file.name,
+        selectedYear,
+        selectedMonth
       });
 
       alert("File uploaded successfully!");
@@ -126,15 +126,15 @@ const UploadCSV = () => {
 
       {/* 🔹 File Upload Section */}
       <input type="file" accept=".csv" onChange={handleFileChange} />
-      <Button 
-          variant="contained" 
-          color="primary" 
-          onClick={handleUpload} 
-          style={{ marginLeft: "10px" }} 
-          disabled={!file || !selectedYear || !selectedMonth || loading}
-        >
-          {loading ? "Uploading..." : "Upload"}
-        </Button>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={handleUpload}
+        style={{ marginLeft: "10px" }}
+        disabled={!file || !selectedYear || !selectedMonth || loading}
+      >
+        {loading ? "Uploading..." : "Upload"}
+      </Button>
 
       {/* 🔹 Uploaded Files Table */}
       <h3>📄 Uploaded CSV Files</h3>
@@ -167,16 +167,16 @@ const UploadCSV = () => {
 
       {/* 🔹 Modal for Viewing CSV Data */}
       <Modal open={open} onClose={handleClose}>
-        <Box sx={{ 
-          position: "absolute", 
-          top: "50%", 
-          left: "50%", 
-          transform: "translate(-50%, -50%)", 
-          width: "80%", 
-          bgcolor: "background.paper", 
-          boxShadow: 24, 
-          p: 4, 
-          overflow: "auto", 
+        <Box sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          width: "80%",
+          bgcolor: "background.paper",
+          boxShadow: 24,
+          p: 4,
+          overflow: "auto",
           maxHeight: "80vh"
         }}>
           <h2>📊 CSV Data</h2>

@@ -41,7 +41,8 @@ const RokuDashboard = () => {
     installs: 0,
     uninstalls: 0,
     netInstalls: 0,
-    revenue: 0,
+    grossrevenue: 0,
+    netrevenue : 0
   });
   const [topVideos, setTopVideos] = useState([]);
   const [topTransactions, setTopTransactions] = useState([]);
@@ -75,7 +76,10 @@ const RokuDashboard = () => {
     console.log(csvData)
     let installs = 0;
     let uninstalls = 0;
-    let revenue = 0;
+    let grossrevenue = 0;
+    let netrevenue = 0;
+
+
     const videoCounts = {};
     const transactions = [];
     const monthlyRev = {};
@@ -83,6 +87,9 @@ const RokuDashboard = () => {
     csvData.forEach((row) => {
       const transactionType = row['Transaction Type']?.toLowerCase();
       const transactionAmount = parseFloat(row['Transaction Amount']?.replace(/,/g, '') || 0);
+
+      const newtransactionAmount = parseFloat(row['Developer Rev Share']?.replace(/,/g, '') || 0);
+
       const videoTitle = row['Video Title'];
 
       const date = new Date(row['Transaction Date']);
@@ -90,7 +97,8 @@ const RokuDashboard = () => {
 
       if (transactionType === 'purchase') installs += 1;
       if (transactionType === 'cancellation') uninstalls += 1;
-      revenue += transactionAmount;
+      grossrevenue += transactionAmount;
+      netrevenue += newtransactionAmount;
 
       if (!monthlyRev[monthYear]) monthlyRev[monthYear] = 0;
       monthlyRev[monthYear] += transactionAmount;
@@ -115,7 +123,7 @@ const RokuDashboard = () => {
     });
 
     const netInstalls = installs - uninstalls;
-    setSummary({ installs, uninstalls, netInstalls, revenue });
+    setSummary({ installs, uninstalls, netInstalls, grossrevenue,netrevenue });
 
     console.log(videoCounts);
 
@@ -165,8 +173,8 @@ const RokuDashboard = () => {
             {[
               { label: 'Installs', value: summary.installs, color: '#4caf50' },
               { label: 'Uninstalls', value: summary.uninstalls, color: '#f44336' },
-              { label: 'Net Installs', value: summary.netInstalls, color: '#2196f3' },
-              { label: 'Revenue ($)', value: summary.revenue.toFixed(2), color: '#ff9800' },
+              { label: 'Gross Revenue ($)', value: summary.grossrevenue.toFixed(2), color: '#ff9800' },
+              { label: 'Net Revenue ($)', value: summary.netrevenue.toFixed(2), color: '#ff9800' },
             ].map((item, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card style={{ backgroundColor: item.color, color: 'white' }}>
