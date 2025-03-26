@@ -97,33 +97,50 @@ const RokuNew = () => {
     let grossrevenue = 0;
     let netrevenue = 0;
     const transactions = [];
-
+  
     csvData.forEach((row) => {
       const transactionType = row["Transaction Type"]?.toLowerCase();
-      const transactionAmount = parseFloat(row["Transaction Amount"]?.replace(/,/g, "") || 0);
-      const newtransactionAmount = parseFloat(row['Developer Rev Share']?.replace(/,/g, '') || 0);
+      const transactionAmount = parseFloat(row["Transaction Amount"]?.replace(/,/g, "")) || 0;
+      const newtransactionAmount = parseFloat(row["Developer Rev Share"]?.replace(/,/g, "")) || 0;
+      const transactionCount = parseInt(row["Transaction Count"]?.replace(/,/g, "") || "0", 10);
 
-      if (transactionType === "purchase") installs += 1;
-      if (transactionType === "cancellation") uninstalls += 1;
+      // const untransactionCount = parseInt(row["Transaction Original Amount"]?.replace(/,/g, "") || "0", 10);
+
+      console.log(transactionCount)
+
+  
+      installs += transactionCount;
+  
+      const untransactionCount = parseFloat(row["Transaction Original Amount"]?.replace(/,/g, "") || "0");
+
+      if (untransactionCount < 0) {
+        uninstalls += 1;
+      }
+  
       grossrevenue += transactionAmount;
       netrevenue += newtransactionAmount;
-
-
-      if (transactionAmount > 0) {
+  
+      if (transactionAmount && transactionAmount > 0) {
         transactions.push({
-          date: row['Transaction Date'],
-          type: row['Transaction Type'],
+          date: row["Transaction Date"],
+          type: row["Transaction Type"],
           amount: transactionAmount,
         });
       }
     });
-
-
-    setSummary({ installs, uninstalls, netInstalls: installs - uninstalls, grossrevenue, netrevenue });
+  
+    setSummary({
+     installs: installs - uninstalls,
+      uninstalls,
+      netInstalls: installs - uninstalls,
+      grossrevenue,
+      netrevenue,
+    });
+  
     setData(csvData);
     setTopTransactions(transactions);
-
   };
+  
 
   return (
     <Container>
@@ -149,7 +166,7 @@ const RokuNew = () => {
       {data.length > 0 && (
         <>
           <Grid container spacing={3} style={{ marginTop: 20 }}>
-            {[{ label: "Installs", value: summary.installs }, { label: "Uninstalls", value: summary.uninstalls }, { label: "Gross Revenue ($)", value: summary.grossrevenue.toFixed(2) }, { label: "Net Revenue ($)", value: summary.netrevenue.toFixed(2) }].map((item, index) => (
+            {[{ label: "Subscriber", value: summary.installs }, { label: "UnSubscriber", value: summary.uninstalls }, { label: "Gross Revenue ($)", value: summary.grossrevenue.toFixed(2) }, { label: "Net Revenue ($)", value: summary.netrevenue.toFixed(2) }].map((item, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card>
                   <CardContent>
@@ -163,8 +180,8 @@ const RokuNew = () => {
 
           <Grid container spacing={3} style={{ marginTop: 20 }}>
             <Grid item xs={12} md={6}>
-              <Typography variant="h6">📈 Installs vs Uninstalls</Typography>
-              <Pie data={{ labels: ["Installs", "Uninstalls"], datasets: [{ data: [summary.installs, summary.uninstalls], backgroundColor: ["#4caf50", "#f44336"] }] }} />
+              <Typography variant="h6">📈 Subscriber vs UnSubscriber</Typography>
+              <Pie data={{ labels: ["Subscriber", "UnSubscriber"], datasets: [{ data: [summary.installs, summary.uninstalls], backgroundColor: ["#4caf50", "#f44336"] }] }} />
             </Grid>
 
             <Grid item xs={12} md={6}>
